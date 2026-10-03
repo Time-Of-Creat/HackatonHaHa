@@ -42,6 +42,22 @@ class NeuralNetwork:
             batch_size=32,
             verbose=1
         )
+    
+    def validate(self, X, y):
+        """
+        Функция для валидации модели.
+        Возвращает словарь с RMSE и MSE (loss).
+        """
+        X = np.asarray(X, dtype='float32')
+        y = np.asarray(y, dtype='float32')
+
+        results = self.model.evaluate(X, y, verbose=0, return_dict=True)
+
+        report = {
+            'loss_mse': float(results.get('loss', float('nan'))),
+            'rmse': float(results.get('RMSE', results.get('rmse', float('nan')))),
+        }
+        return report
 
     def predict(self, value):
         """Функция для предсказания модели"""
