@@ -19,7 +19,7 @@ class NeuralNetwork:
             layers.Dropout(0.3),
 
             # Выход
-            layers.Dense(10)
+            layers.Dense(1)
         ])
 
         self._compile_model()
