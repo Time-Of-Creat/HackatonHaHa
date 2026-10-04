@@ -3,7 +3,7 @@ from source.data_management.hockey_data_generator import HockeyDataGenerator
 
 
 if __name__ == "__main__":
-    data_generator = HockeyDataGenerator("../data")
+    data_generator = HockeyDataGenerator("data")
     nn = NeuralNetwork()
 
     train_data = data_generator.get_train_data()

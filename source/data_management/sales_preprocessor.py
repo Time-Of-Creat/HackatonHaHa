@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+
 class SalesPreprocessor:
     def __init__(self, raw_dir='data/raw'):
         self.raw_dir = raw_dir
@@ -27,14 +28,14 @@ class SalesPreprocessor:
             return [(0.0, 0.0, 0)]
 
         start_date = sub['date'].min()
-        cum_tickets = 0
+        sum_tickets = 0
         snapshots = []
 
         for _, row in sub.iterrows():
             days_since_start = float((row['date'] - start_date).days)
-            cum_tickets += row['tickets']
-            sold_ratio = float(cum_tickets / max_capacity) if max_capacity > 0 else 0.0
-            snapshots.append((days_since_start, sold_ratio, cum_tickets))
+            sum_tickets += row['tickets']
+            sold_ratio = float(sum_tickets / max_capacity) if max_capacity > 0 else 0.0
+            snapshots.append((days_since_start, sold_ratio, sum_tickets))
 
         return snapshots
 

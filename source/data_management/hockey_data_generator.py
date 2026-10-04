@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from feature_encoder import FeatureEncoder
-from sales_preprocessor import SalesPreprocessor
+from source.data_management.feature_encoder import FeatureEncoder
+from source.data_management.sales_preprocessor import SalesPreprocessor
 
 class HockeyDataGenerator:
     def __init__(self, raw_dir='data/raw', val_ratio=0.2):

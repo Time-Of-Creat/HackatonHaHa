@@ -1,5 +1,5 @@
 import numpy as np
-from hockey_data_generator import HockeyDataGenerator
+from source.data_management.hockey_data_generator import HockeyDataGenerator
 
 def main():
     print("1. Инициализация и подготовка данных...")

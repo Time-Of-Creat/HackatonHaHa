@@ -3,7 +3,7 @@ import contextlib
 import numpy as np
 import tensorflow as tf
 
-from tensorflow.keras import layers
+from tensorflow.keras import layers, regularizers
 
 from source.neural_network.metrics.RMSE import RMSE
 from source.neural_network.architecture_logger import ArchitectureLogger
@@ -16,20 +16,51 @@ class NeuralNetwork:
             layers.Input(shape=(43,)),
 
             # Внутренняя архитектура нейронки
-            layers.Dense(256, activation='relu'),
-            layers.Dropout(0.3),
+            layers.Dense(
+                128,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
+            layers.BatchNormalization(),
+            layers.Dropout(0.2),
+
+            layers.Dense(
+                64,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
+            layers.BatchNormalization(),
+            layers.Dropout(0.2),
+
+            layers.Dense(
+                32,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
+            layers.BatchNormalization(),
+            layers.Dropout(0.15),
+
+            layers.Dense(
+                16,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
 
             # Выход
             layers.Dense(1)
         ])
-        self.logger = ArchitectureLogger(filename="top_architectures.txt")
 
+        self.logger = ArchitectureLogger(filename="top_architectures.txt")
         self._compile_model()
 
     def _compile_model(self):
         self.model.compile(
-            optimizer='adam',
-            loss='mse',
+            optimizer=tf.keras.optimizers.Adam(learning_rate=5e-4),
+            loss="mse",
             metrics=[RMSE()]
         )
 
