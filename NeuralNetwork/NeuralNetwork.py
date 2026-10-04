@@ -7,6 +7,9 @@ from tensorflow.keras import layers
 
 from .Metrics.RMSE import RMSE
 
+from logger import ArchitectureLogger
+
+logger = ArchitectureLogger(filename="top_architectures.txt")
 
 class NeuralNetwork:
     def __init__(self):
@@ -57,6 +60,7 @@ class NeuralNetwork:
             'loss_mse': float(results.get('loss', float('nan'))),
             'rmse': float(results.get('RMSE', results.get('rmse', float('nan')))),
         }
+        logger.update(architecture_str=str(self), rmse=report['rmse'])
         return report
 
     def predict(self, value):

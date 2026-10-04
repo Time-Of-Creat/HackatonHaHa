@@ -168,3 +168,20 @@ $RECYCLE.BIN/
 *.swp
 *.swo
 *.csv
+
+
+# ===== Architectures=====
+top_architectures.txt
+
+# ===== Visual Studio =====
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# ===== Neural Network Weights & Models =====
+*.h5
+*.keras
+*.pb
+*.ckpt
+*.onnx
