@@ -8,11 +8,16 @@ from sales_preprocessor import SalesPreprocessor  # Импортируем об�
 Объединяет работу FeatureEncoder и SalesPreprocessor. Предоставляет нейросети готовый интерфейс для получения вектора признаков под одиночный 
 прогноз (get_match_zone_features) или полного датасета под обучение (get_train_data / get_val_data)."""
 
+
 class HockeyDataGenerator:
-    def __init__(self, raw_dir):
+    def __init__(self, raw_dir, val_ratio=0.2):
         self.raw_dir = raw_dir  # Сохраняем путь к папке с сырыми CSV
         self.encoder = FeatureEncoder(raw_dir)  # Инициализируем объект FeatureEncoder
         self.sales = SalesPreprocessor(raw_dir)  # Инициализируем объект SalesPreprocessor
+
+        self.val_ratio = val_ratio
+
+        self.prepare()
 
     def prepare(self):
         """Загружает и подготавливает все статические и динамические данные."""
@@ -69,15 +74,16 @@ class HockeyDataGenerator:
                 X.append([days, ratio] + static_vec)
                 # Добавляем целевой ответ в список Y
                 Y.append(total_target)
-                
-        # Возвращаем готовую обучающую выборку (23 855 примеров)
-        return X, Y
 
-    def get_val_data(self, val_ratio=0.2):
+        split_idx = int(len(X) * (1 - self.val_ratio))
+
+        return X[:split_idx], Y[:split_idx]
+
+    def get_val_data(self):
         """Возвращает валидационную выборку (последние N% матчей)."""
         # Сначала собираем все данные обучающей выборки
         X_all, Y_all = self.get_train_data()
         # Вычисляем индекс отсечения для валидационной части (например, 80% train / 20% val)
-        split_idx = int(len(X_all) * (1 - val_ratio))
+        split_idx = int(len(X_all) * (1 - self.val_ratio))
         # Возвращаем последние 20% записей для проверки качества модели
         return X_all[split_idx:], Y_all[split_idx:]

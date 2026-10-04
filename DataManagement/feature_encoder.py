@@ -36,31 +36,31 @@ class FeatureEncoder:
 
     def fit_transform(self):
         """Выполняет One-Hot Encoding и нормализацию числовых параметров."""
-        # Загружаем и объединяем данные с помощью предыдущего метода
         df = self._load_and_merge()
         
-        # Определяем список числовых столбцов для нормализации
+        # 1. Нормализация числовых характеристик
         num_cols = ['seats', 'season_tickets', 'max_capacity']
-        # Масштабируем числовые характеристики к диапазону [0, 1] с помощью MinMaxScaler
         df[num_cols] = self.scaler.fit_transform(df[num_cols])
         
-        # Определяем список категориальных столбцов для One-Hot Encoding
+        # 2. One-Hot Encoding для категорий
         cat_cols = ['day_of_week', 'opponent', 'zone']
-        # Кодируем категории в бинарные столбцы (0.0 и 1.0)
-        df_encoded = pd.get_dummies(df, columns=cat_cols, dtype=float)
+        # Выбираем только те колонки из cat_cols, которые реально есть в df
+        actual_cat_cols = [c for c in cat_cols if c in df.columns]
+        df_encoded = pd.get_dummies(df, columns=actual_cat_cols, dtype=float)
         
-        # Список служебных и текстовых столбцов, которые НЕ ДОЛЖНЫ попадать в нейросеть
+        # 3. СЛУЖЕБНЫЕ И ТЕКСТОВЫЕ КОЛОНКИ ДЛЯ ИСКЛЮЧЕНИЯ
         exclude = [
             'match_id', 'zone_id_orig', 'date', 'date_dt', 'time', 
             'season', 'train_or_test', 'data_type', 'tickets_total', 'stage'
         ]
-        # Фильтруем только те столбцы, которые пойдут в нейросеть как фичи
-        self.feature_cols = [c for c in df_encoded.columns if c not in exclude]
         
-        # Сохраняем закодированную таблицу в атрибут класса
+        # Вектор фичей: берем ТОЛЬКО числовые столбцы (float/int/bool) и выкидываем exclude
+        numeric_df = df_encoded.select_dtypes(include=['number', 'bool'])
+        self.feature_cols = [c for c in numeric_df.columns if c not in exclude]
+        
         self.encoded_df = df_encoded
-        # Возвращаем готовую таблицу
         return self.encoded_df
+
 
     def get_static_features(self, match_id, zone):
         """Безопасно возвращает статический вектор (фичи) для конкретного матча и зоны."""
