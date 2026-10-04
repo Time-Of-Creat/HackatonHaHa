@@ -1,25 +1,14 @@
-# logger.py
 
 class ArchitectureLogger:
     def __init__(self, filename: str = "top_architectures.txt"):
-        """
-        :param filename: файл, куда будет сохраняться весь отсортированный список архитектур
-        """
         self.filename = filename
-        # Список для хранения всех результатов в виде (rmse, architecture_string)
-        self.all_models = []
+        self.all_models = []  # список вида (rmse, architecture_string)
 
+    # TODO - Дашко, тут в топе надо учесть еще и архитектуры, которые прогонялись при прошлом запуске программы, а не только при текущем
     def update(self, architecture_str: str, rmse: float):
-        """
-        Метод вызывается каждый раз при валидации нейросети.
-        """
-        # 1. Добавляем новый прогон
+        """Метод вызывается каждый раз при валидации нейросети."""
         self.all_models.append((rmse, architecture_str))
-        
-        # 2. Сортируем абсолютно ВСЕ модели по RMSE (от наименьшего к наибольшему)
         self.all_models.sort(key=lambda x: x[0])
-        
-        # 3. Перезаписываем файл со всем списком
         self._save_to_file()
 
     def _save_to_file(self):

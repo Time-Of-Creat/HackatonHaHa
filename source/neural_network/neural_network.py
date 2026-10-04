@@ -5,17 +5,15 @@ import tensorflow as tf
 
 from tensorflow.keras import layers
 
-from .Metrics.RMSE import RMSE
+from source.neural_network.metrics.RMSE import RMSE
+from source.neural_network.architecture_logger import ArchitectureLogger
 
-from logger import ArchitectureLogger
-
-logger = ArchitectureLogger(filename="top_architectures.txt")
 
 class NeuralNetwork:
     def __init__(self):
         self.model = tf.keras.Sequential([
             # Вход
-            layers.Input(shape=(1,)),
+            layers.Input(shape=(43,)),
 
             # Внутренняя архитектура нейронки
             layers.Dense(256, activation='relu'),
@@ -24,6 +22,7 @@ class NeuralNetwork:
             # Выход
             layers.Dense(1)
         ])
+        self.logger = ArchitectureLogger(filename="top_architectures.txt")
 
         self._compile_model()
 
@@ -41,7 +40,7 @@ class NeuralNetwork:
 
         return self.model.fit(
             X, y,
-            epochs=100,
+            epochs=50,
             batch_size=32,
             verbose=1
         )
@@ -60,7 +59,7 @@ class NeuralNetwork:
             'loss_mse': float(results.get('loss', float('nan'))),
             'rmse': float(results.get('RMSE', results.get('rmse', float('nan')))),
         }
-        logger.update(architecture_str=str(self), rmse=report['rmse'])
+        self.logger.update(architecture_str=str(self), rmse=report['rmse'])
         return report
 
     def predict(self, value):
