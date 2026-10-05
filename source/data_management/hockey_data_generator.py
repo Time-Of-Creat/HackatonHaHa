@@ -24,6 +24,8 @@ class HockeyDataGenerator:
             sub_df = pd.read_csv(sub_path)
             if 'tickets_total' in sub_df.columns:
                 for _, row in sub_df.iterrows():
+                    if pd.isna(row['tickets_total']):
+                        continue
                     key = (str(row['match_id']).strip(), str(row['zone']).strip())
                     self.targets_cache[key] = float(row['tickets_total'])
 
@@ -70,10 +72,11 @@ class HockeyDataGenerator:
                 snapshots = self.sales.generate_snapshots(row['match_id'], row[zone_col], max_cap)
             
             total_target = self.targets_cache.get((m_id, z_name), 0.0)
+            target_ratio = float(total_target / max_cap) if max_cap > 0 else 0.0
             
             for days, ratio, _ in snapshots:
                 X.append([days, ratio] + static_vec)
-                Y.append(total_target)
+                Y.append(target_ratio)
 
         split_idx = int(len(X) * (1 - self.val_ratio))
         return X[:split_idx], Y[:split_idx]

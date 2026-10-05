@@ -13,7 +13,7 @@ class NeuralNetwork:
     def __init__(self):
         self.model = tf.keras.Sequential([
             # Вход
-            layers.Input(shape=(43,)),
+            layers.Input(shape=(42,)),
 
             # Внутренняя архитектура нейронки
             layers.Dense(
@@ -51,7 +51,7 @@ class NeuralNetwork:
             ),
 
             # Выход
-            layers.Dense(1)
+            layers.Dense(1, activation='sigmoid')
         ])
 
         self.logger = ArchitectureLogger(filename="top_architectures.txt")

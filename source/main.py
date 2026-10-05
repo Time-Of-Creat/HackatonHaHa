@@ -12,3 +12,5 @@ if __name__ == "__main__":
     nn.fit(train_data[0], train_data[1])
     nn.validate(train_data[0], train_data[1])
 
+    print(nn.predict(validation_data[0][0]))
+

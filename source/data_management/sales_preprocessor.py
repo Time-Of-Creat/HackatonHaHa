@@ -6,6 +6,7 @@ class SalesPreprocessor:
     def __init__(self, raw_dir='data/raw'):
         self.raw_dir = raw_dir
         self.sales_df = None
+        self.max_span_days = 1.0
 
     def load_sales(self):
         sales_path = os.path.join(self.raw_dir, 'sales_daily.csv')
@@ -15,6 +16,9 @@ class SalesPreprocessor:
             self.sales_df['zone_str'] = self.sales_df['zone'].astype(str).str.strip()
             self.sales_df['date'] = pd.to_datetime(self.sales_df['date'])
             self.sales_df = self.sales_df.sort_values('date')
+
+            spans = self.sales_df.groupby(['match_id_str', 'zone_str'])['date'].agg(['min', 'max'])
+            self.max_span_days = float(max((spans['max'] - spans['min']).dt.days.max(), 1))
 
     def generate_daily_snapshots(self, match_id, zone, max_capacity):
         if self.sales_df is None:
@@ -35,7 +39,7 @@ class SalesPreprocessor:
             days_since_start = float((row['date'] - start_date).days)
             sum_tickets += row['tickets']
             sold_ratio = float(sum_tickets / max_capacity) if max_capacity > 0 else 0.0
-            snapshots.append((days_since_start, sold_ratio, sum_tickets))
+            snapshots.append((days_since_start / self.max_span_days, sold_ratio, sum_tickets))
 
         return snapshots
 
