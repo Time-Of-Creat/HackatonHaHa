@@ -41,3 +41,9 @@ class FeatureEncoder:
         if sub.empty:
             return [0.0] * len(self.feature_cols)
         return sub[self.feature_cols].iloc[0].tolist()
+
+    def get_capacity(self, match_id, zone):
+        mask = (self.encoded_df['match_id'].astype(str).str.strip() == str(match_id).strip()) & \
+               (self.encoded_df['zone_id_orig'].astype(str).str.strip() == str(zone).strip())
+        sub = self.encoded_df[mask]
+        return float(sub['max_capacity'].iloc[0]) if not sub.empty else 0.0

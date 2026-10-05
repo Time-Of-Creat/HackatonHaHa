@@ -54,7 +54,7 @@ class NeuralNetwork:
             layers.Dense(1, activation='sigmoid')
         ])
 
-        self.logger = ArchitectureLogger(filename="top_architectures.txt")
+        self.logger = ArchitectureLogger()
         self._compile_model()
 
     def _compile_model(self):

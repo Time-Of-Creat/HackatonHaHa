@@ -2,12 +2,14 @@ import os
 import pandas as pd
 from source.data_management.feature_encoder import FeatureEncoder
 from source.data_management.sales_preprocessor import SalesPreprocessor
+from source.file_manager.folders_data import folders_data
+
 
 class HockeyDataGenerator:
-    def __init__(self, raw_dir='data/raw', val_ratio=0.2):
-        self.raw_dir = raw_dir
-        self.encoder = FeatureEncoder(raw_dir)
-        self.sales = SalesPreprocessor(raw_dir)
+    def __init__(self, val_ratio=0.2):
+        self.raw_dir = str(folders_data.DATA_DIR)
+        self.encoder = FeatureEncoder(self.raw_dir)
+        self.sales = SalesPreprocessor(self.raw_dir)
         self.val_ratio = val_ratio
         
         self.targets_cache = {}
@@ -44,8 +46,7 @@ class HockeyDataGenerator:
     def get_match_zone_features(self, match_id, zone):
         static_vec = self.encoder.get_static_features(match_id, zone)
         
-        mask = (self.encoder.encoded_df['match_id'] == match_id)
-        max_cap = self.encoder.encoded_df[mask]['max_capacity'].values[0]
+        max_cap = self.encoder.get_capacity(match_id, zone)
         
         days, sold_ratio = self.sales.get_latest_sales_state(match_id, zone, max_cap)
         return [days, sold_ratio] + static_vec

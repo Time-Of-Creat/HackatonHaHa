@@ -1,7 +1,9 @@
+from source.file_manager.folders_data import folders_data
+
 
 class ArchitectureLogger:
-    def __init__(self, filename: str = "top_architectures.txt"):
-        self.filename = filename
+    def __init__(self):
+        self.filename = str(folders_data.LOGS_FILE)
         self.all_models = []  # список вида (rmse, architecture_string)
 
     # TODO - Дашко, тут в топе надо учесть еще и архитектуры, которые прогонялись при прошлом запуске программы, а не только при текущем
