@@ -30,7 +30,8 @@ class FeatureEncoder:
         exclude_cols = ['match_id', 'zone_id_orig', 'part', 'tickets_total', 'season', 'date', 'time', 'sales_open', 'opponent_khl', 'max_capacity']
         self.feature_cols = [c for c in df.columns if c not in exclude_cols]
         
-        df[self.feature_cols] = self.scaler.fit_transform(df[self.feature_cols])
+        self.scaler.fit(df.loc[df['part'] == 'train', self.feature_cols])
+        df[self.feature_cols] = self.scaler.transform(df[self.feature_cols])
         
         self.encoded_df = df
         return df
@@ -47,3 +48,6 @@ class FeatureEncoder:
                (self.encoded_df['zone_id_orig'].astype(str).str.strip() == str(zone).strip())
         sub = self.encoded_df[mask]
         return float(sub['max_capacity'].iloc[0]) if not sub.empty else 0.0
+
+    def get_train_match_ids(self):
+        return set(self.encoded_df.loc[self.encoded_df['part'] == 'train', 'match_id'].astype(str).str.strip())
