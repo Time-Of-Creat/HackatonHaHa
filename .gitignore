@@ -185,3 +185,8 @@ top_architectures.txt
 *.pb
 *.ckpt
 *.onnx
+
+
+# ===== Hackathon Logs =====
+*.txt.json
+*log*.json
