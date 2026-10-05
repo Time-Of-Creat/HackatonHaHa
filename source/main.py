@@ -12,6 +12,7 @@ def learn_and_validate():
     return validation_res['rmse']
 
 
+# TODO - Я (губка) доделаю это потом
 def form_predictions_table(start_game: int = 86, end_game: int = 102):
     for game in range(start_game, end_game+1):
         for zone in range(1, 9):
