@@ -11,6 +11,6 @@ class Application:
 
     def get_game_zone_prediction(self, game: str, zone: str):
         game_data = self.data_generator.get_match_zone_features(game, zone)
-        prediction = int(
-            self.nn.predict(game_data)[0] * self.data_generator.encoder.get_capacity(game, zone))
-        return prediction
+        capacity = self.data_generator.encoder.get_capacity(game, zone)
+        prediction = int(self.nn.predict(game_data)[0] * capacity)
+        return min(prediction, capacity)
