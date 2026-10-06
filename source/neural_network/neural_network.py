@@ -16,6 +16,23 @@ class NeuralNetwork:
             layers.Input(shape=(42,)),
 
             # Внутренняя архитектура нейронки
+            layers.Dense(
+                128,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
+            layers.BatchNormalization(),
+            layers.Dropout(0.2),
+
+            layers.Dense(
+                64,
+                activation='swish',
+                kernel_initializer='he_normal',
+                kernel_regularizer=regularizers.l2(1e-4)
+            ),
+            layers.BatchNormalization(),
+            layers.Dropout(0.2),
 
             layers.Dense(
                 32,
