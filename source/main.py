@@ -1,4 +1,4 @@
-from application import Application
+from source.application import Application
 
 
 def learn_and_validate():
