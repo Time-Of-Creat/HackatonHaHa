@@ -13,6 +13,7 @@ class NeuralNetwork:
     def __init__(self):
         self.model = tf.keras.Sequential([
             layers.Input(shape=(42,)),
+            layers.Dense(4, activation='sigmoid'),
             layers.Dense(1, activation="sigmoid")
         ])
 
@@ -33,7 +34,7 @@ class NeuralNetwork:
 
         return self.model.fit(
             X, y,
-            epochs=30,
+            epochs=5,
             batch_size=32,
             verbose=1
         )
