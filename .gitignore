@@ -190,5 +190,5 @@ top_architectures.txt
 # ===== Hackathon Logs =====
 *.txt.json
 *log*.json
-*.txt
 *.json
+/logs
