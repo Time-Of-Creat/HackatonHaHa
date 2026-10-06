@@ -13,7 +13,7 @@ class NeuralNetwork:
     def __init__(self):
         self.model = tf.keras.Sequential([
             layers.Input(shape=(42,)),
-            layers.Dense(1)
+            layers.Dense(1, activation="sigmoid")
         ])
 
         self.logger = ArchitectureLogger()
