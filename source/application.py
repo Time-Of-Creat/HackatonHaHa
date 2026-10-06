@@ -1,10 +1,12 @@
 from source.data_management.hockey_data_generator import HockeyDataGenerator
 from source.neural_network.neural_network import NeuralNetwork
+from source.csv_table_creator import CSVTableCreator
 
 
 class Application:
     def __init__(self):
         self.data_generator = HockeyDataGenerator()
+        self.table_creator = CSVTableCreator()
         self.nn = NeuralNetwork()
 
     def get_game_zone_prediction(self, game: str, zone: str):
