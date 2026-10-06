@@ -12,46 +12,8 @@ from source.neural_network.architecture_logger import ArchitectureLogger
 class NeuralNetwork:
     def __init__(self):
         self.model = tf.keras.Sequential([
-            # Вход
             layers.Input(shape=(42,)),
-
-            # Внутренняя архитектура нейронки
-            layers.Dense(
-                128,
-                activation='swish',
-                kernel_initializer='he_normal',
-                kernel_regularizer=regularizers.l2(1e-4)
-            ),
-            layers.BatchNormalization(),
-            layers.Dropout(0.2),
-
-            layers.Dense(
-                64,
-                activation='swish',
-                kernel_initializer='he_normal',
-                kernel_regularizer=regularizers.l2(1e-4)
-            ),
-            layers.BatchNormalization(),
-            layers.Dropout(0.2),
-
-            layers.Dense(
-                32,
-                activation='swish',
-                kernel_initializer='he_normal',
-                kernel_regularizer=regularizers.l2(1e-4)
-            ),
-            layers.BatchNormalization(),
-            layers.Dropout(0.15),
-
-            layers.Dense(
-                16,
-                activation='swish',
-                kernel_initializer='he_normal',
-                kernel_regularizer=regularizers.l2(1e-4)
-            ),
-
-            # Выход
-            layers.Dense(1, activation='sigmoid')
+            layers.Dense(1)
         ])
 
         self.logger = ArchitectureLogger()
@@ -59,7 +21,7 @@ class NeuralNetwork:
 
     def _compile_model(self):
         self.model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=5e-4),
+            tf.keras.optimizers.Adam(learning_rate=5e-4),
             loss="mse",
             metrics=[RMSE()]
         )
@@ -71,7 +33,7 @@ class NeuralNetwork:
 
         return self.model.fit(
             X, y,
-            epochs=50,
+            epochs=30,
             batch_size=32,
             verbose=1
         )
