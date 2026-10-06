@@ -9,7 +9,7 @@ def learn_and_validate():
     validation_res = app.nn.validate(validation_data[0], validation_data[1])['rmse']
     print(f"Результат валидации (RMSE): {validation_res}")
 
-    return validation_res['rmse']
+    return validation_res
 
 
 # TODO - Я (губка) доделаю это потом
@@ -21,4 +21,5 @@ def form_predictions_table(start_game: int = 86, end_game: int = 102):
 
 if __name__ == "__main__":
     app = Application()
+    learn_and_validate()
 
