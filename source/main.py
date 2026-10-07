@@ -1,5 +1,7 @@
 from source.application import Application
 
+app = Application()
+
 
 def learn_and_validate():
     """Функция для обучения и валидации нейросети"""
@@ -30,8 +32,6 @@ def form_predictions_table(start_game: int = 86, end_game: int = 102):
 
 
 if __name__ == "__main__":
-    app = Application()
-    
     learn_and_validate()
     form_predictions_table()
 
